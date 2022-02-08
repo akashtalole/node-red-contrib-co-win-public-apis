@@ -1,0 +1,817 @@
+<script type="text/javascript">
+    RED.nodes.registerType('co-win-public-apis', {
+        category: 'function',
+        color: '#89bf04',
+        defaults: {
+            service: { value: "", type: "co-win-public-apis-service", required: true },
+            method: { value: "", required: true },
+            generateOTP_body: { value: "" },
+            generateOTP_bodyType: { value: "str" },
+            confirmOTP_body: { value: "" },
+            confirmOTP_bodyType: { value: "str" },
+            states_acceptLanguage: { value: "" },
+            states_acceptLanguageType: { value: "str" },
+            districts_acceptLanguage: { value: "" },
+            districts_acceptLanguageType: { value: "str" },
+            districts_stateId: { value: "" },
+            districts_stateIdType: { value: "str" },
+            findByPin_acceptLanguage: { value: "" },
+            findByPin_acceptLanguageType: { value: "str" },
+            findByPin_pincode: { value: "" },
+            findByPin_pincodeType: { value: "str" },
+            findByPin_date: { value: "" },
+            findByPin_dateType: { value: "str" },
+            findByDistrict_acceptLanguage: { value: "" },
+            findByDistrict_acceptLanguageType: { value: "str" },
+            findByDistrict_districtId: { value: "" },
+            findByDistrict_districtIdType: { value: "str" },
+            findByDistrict_date: { value: "" },
+            findByDistrict_dateType: { value: "str" },
+            findByLatLong_acceptLanguage: { value: "" },
+            findByLatLong_acceptLanguageType: { value: "str" },
+            findByLatLong_lat: { value: "" },
+            findByLatLong_latType: { value: "str" },
+            findByLatLong_long: { value: "" },
+            findByLatLong_longType: { value: "str" },
+            calendarByPin_acceptLanguage: { value: "" },
+            calendarByPin_acceptLanguageType: { value: "str" },
+            calendarByPin_pincode: { value: "" },
+            calendarByPin_pincodeType: { value: "str" },
+            calendarByPin_date: { value: "" },
+            calendarByPin_dateType: { value: "str" },
+            calendarByDistrict_acceptLanguage: { value: "" },
+            calendarByDistrict_acceptLanguageType: { value: "str" },
+            calendarByDistrict_districtId: { value: "" },
+            calendarByDistrict_districtIdType: { value: "str" },
+            calendarByDistrict_date: { value: "" },
+            calendarByDistrict_dateType: { value: "str" },
+            calendarByCenter_acceptLanguage: { value: "" },
+            calendarByCenter_acceptLanguageType: { value: "str" },
+            calendarByCenter_centerId: { value: "" },
+            calendarByCenter_centerIdType: { value: "str" },
+            calendarByCenter_date: { value: "" },
+            calendarByCenter_dateType: { value: "str" },
+            download_beneficiaryReferenceId: { value: "" },
+            download_beneficiaryReferenceIdType: { value: "str" },
+            name: { value: "" }
+        },
+        inputs: 1,
+        outputs: 1,
+        icon: 'icon.png',
+        label: function () {
+            return this.name || this.method || "co-win-public-apis";
+        },
+        labelStyle: function() {
+            return this.name?"node_label_italic":"";
+        },
+        oneditprepare: function () {
+            var selectedMethod = $('#node-input-method option:selected');
+            if (!selectedMethod.val()) {
+                var methods = $('#node-input-method').children();
+                var firstMethod = methods.first();
+                $('#node-input-method').val(firstMethod.val());
+            }
+
+            var showParameters = function () {
+
+                $("#node-input-generateOTP_body").typedInput({
+                    default: 'str',
+                    typeField: $("#node-input-generateOTP_bodyType"),
+                    types: ['str', 'msg']
+                });
+
+                $("#generateOTP_body").hide();
+
+                $("#node-input-confirmOTP_body").typedInput({
+                    default: 'str',
+                    typeField: $("#node-input-confirmOTP_bodyType"),
+                    types: ['str', 'msg']
+                });
+
+                $("#confirmOTP_body").hide();
+
+                $("#node-input-states_acceptLanguage").typedInput({
+                    default: 'str',
+                    typeField: $("#node-input-states_acceptLanguageType"),
+                    types: ['str', 'msg']
+                });
+
+                $("#states_acceptLanguage").hide();
+
+                $("#node-input-districts_acceptLanguage").typedInput({
+                    default: 'str',
+                    typeField: $("#node-input-districts_acceptLanguageType"),
+                    types: ['str', 'msg']
+                });
+
+                $("#districts_acceptLanguage").hide();
+
+                $("#node-input-districts_stateId").typedInput({
+                    default: 'str',
+                    typeField: $("#node-input-districts_stateIdType"),
+                    types: ['str', 'msg']
+                });
+
+                $("#districts_stateId").hide();
+
+                $("#node-input-findByPin_acceptLanguage").typedInput({
+                    default: 'str',
+                    typeField: $("#node-input-findByPin_acceptLanguageType"),
+                    types: ['str', 'msg']
+                });
+
+                $("#findByPin_acceptLanguage").hide();
+
+                $("#node-input-findByPin_pincode").typedInput({
+                    default: 'str',
+                    typeField: $("#node-input-findByPin_pincodeType"),
+                    types: ['str', 'msg']
+                });
+
+                $("#findByPin_pincode").hide();
+
+                $("#node-input-findByPin_date").typedInput({
+                    default: 'str',
+                    typeField: $("#node-input-findByPin_dateType"),
+                    types: ['str', 'msg']
+                });
+
+                $("#findByPin_date").hide();
+
+                $("#node-input-findByDistrict_acceptLanguage").typedInput({
+                    default: 'str',
+                    typeField: $("#node-input-findByDistrict_acceptLanguageType"),
+                    types: ['str', 'msg']
+                });
+
+                $("#findByDistrict_acceptLanguage").hide();
+
+                $("#node-input-findByDistrict_districtId").typedInput({
+                    default: 'str',
+                    typeField: $("#node-input-findByDistrict_districtIdType"),
+                    types: ['str', 'msg']
+                });
+
+                $("#findByDistrict_districtId").hide();
+
+                $("#node-input-findByDistrict_date").typedInput({
+                    default: 'str',
+                    typeField: $("#node-input-findByDistrict_dateType"),
+                    types: ['str', 'msg']
+                });
+
+                $("#findByDistrict_date").hide();
+
+                $("#node-input-findByLatLong_acceptLanguage").typedInput({
+                    default: 'str',
+                    typeField: $("#node-input-findByLatLong_acceptLanguageType"),
+                    types: ['str', 'msg']
+                });
+
+                $("#findByLatLong_acceptLanguage").hide();
+
+                $("#node-input-findByLatLong_lat").typedInput({
+                    default: 'str',
+                    typeField: $("#node-input-findByLatLong_latType"),
+                    types: ['str', 'msg']
+                });
+
+                $("#findByLatLong_lat").hide();
+
+                $("#node-input-findByLatLong_long").typedInput({
+                    default: 'str',
+                    typeField: $("#node-input-findByLatLong_longType"),
+                    types: ['str', 'msg']
+                });
+
+                $("#findByLatLong_long").hide();
+
+                $("#node-input-calendarByPin_acceptLanguage").typedInput({
+                    default: 'str',
+                    typeField: $("#node-input-calendarByPin_acceptLanguageType"),
+                    types: ['str', 'msg']
+                });
+
+                $("#calendarByPin_acceptLanguage").hide();
+
+                $("#node-input-calendarByPin_pincode").typedInput({
+                    default: 'str',
+                    typeField: $("#node-input-calendarByPin_pincodeType"),
+                    types: ['str', 'msg']
+                });
+
+                $("#calendarByPin_pincode").hide();
+
+                $("#node-input-calendarByPin_date").typedInput({
+                    default: 'str',
+                    typeField: $("#node-input-calendarByPin_dateType"),
+                    types: ['str', 'msg']
+                });
+
+                $("#calendarByPin_date").hide();
+
+                $("#node-input-calendarByDistrict_acceptLanguage").typedInput({
+                    default: 'str',
+                    typeField: $("#node-input-calendarByDistrict_acceptLanguageType"),
+                    types: ['str', 'msg']
+                });
+
+                $("#calendarByDistrict_acceptLanguage").hide();
+
+                $("#node-input-calendarByDistrict_districtId").typedInput({
+                    default: 'str',
+                    typeField: $("#node-input-calendarByDistrict_districtIdType"),
+                    types: ['str', 'msg']
+                });
+
+                $("#calendarByDistrict_districtId").hide();
+
+                $("#node-input-calendarByDistrict_date").typedInput({
+                    default: 'str',
+                    typeField: $("#node-input-calendarByDistrict_dateType"),
+                    types: ['str', 'msg']
+                });
+
+                $("#calendarByDistrict_date").hide();
+
+                $("#node-input-calendarByCenter_acceptLanguage").typedInput({
+                    default: 'str',
+                    typeField: $("#node-input-calendarByCenter_acceptLanguageType"),
+                    types: ['str', 'msg']
+                });
+
+                $("#calendarByCenter_acceptLanguage").hide();
+
+                $("#node-input-calendarByCenter_centerId").typedInput({
+                    default: 'str',
+                    typeField: $("#node-input-calendarByCenter_centerIdType"),
+                    types: ['str', 'msg']
+                });
+
+                $("#calendarByCenter_centerId").hide();
+
+                $("#node-input-calendarByCenter_date").typedInput({
+                    default: 'str',
+                    typeField: $("#node-input-calendarByCenter_dateType"),
+                    types: ['str', 'msg']
+                });
+
+                $("#calendarByCenter_date").hide();
+
+                $("#node-input-download_beneficiaryReferenceId").typedInput({
+                    default: 'str',
+                    typeField: $("#node-input-download_beneficiaryReferenceIdType"),
+                    types: ['str', 'msg']
+                });
+
+                $("#download_beneficiaryReferenceId").hide();
+
+                $("#optional-parameters").hide();
+                $("#optional-parameters-label").hide();
+                if ($("#node-input-method").val() === 'generateOTP') {
+
+                }
+                if ($("#node-input-method").val() === 'confirmOTP') {
+
+                }
+                if ($("#node-input-method").val() === 'states') {
+
+                    $("#optional-parameters").show();
+                    $("#optional-parameters-label").show();
+                    
+                }
+                if ($("#node-input-method").val() === 'districts') {
+
+                    $("#optional-parameters").show();
+                    $("#optional-parameters-label").show();
+                    
+                }
+                if ($("#node-input-method").val() === 'findByPin') {
+
+                    $("#optional-parameters").show();
+                    $("#optional-parameters-label").show();
+                    
+                }
+                if ($("#node-input-method").val() === 'findByDistrict') {
+
+                    $("#optional-parameters").show();
+                    $("#optional-parameters-label").show();
+                    
+                }
+                if ($("#node-input-method").val() === 'findByLatLong') {
+
+                    $("#optional-parameters").show();
+                    $("#optional-parameters-label").show();
+                    
+                }
+                if ($("#node-input-method").val() === 'calendarByPin') {
+
+                    $("#optional-parameters").show();
+                    $("#optional-parameters-label").show();
+                    
+                }
+                if ($("#node-input-method").val() === 'calendarByDistrict') {
+
+                    $("#optional-parameters").show();
+                    $("#optional-parameters-label").show();
+                    
+                }
+                if ($("#node-input-method").val() === 'calendarByCenter') {
+
+                    $("#optional-parameters").show();
+                    $("#optional-parameters-label").show();
+                    
+                }
+                if ($("#node-input-method").val() === 'download') {
+
+                }
+
+                if ($("#optional-parameters").prop('checked')) {
+                    if ($("#node-input-method").val() === 'generateOTP') {
+
+                    }
+                    if ($("#node-input-method").val() === 'confirmOTP') {
+
+                    }
+                    if ($("#node-input-method").val() === 'states') {
+
+                        $("#states_acceptLanguage").show();
+                        
+                    }
+                    if ($("#node-input-method").val() === 'districts') {
+
+                        $("#districts_acceptLanguage").show();
+                        
+                        $("#districts_stateId").show();
+                        
+                    }
+                    if ($("#node-input-method").val() === 'findByPin') {
+
+                        $("#findByPin_acceptLanguage").show();
+                        
+                        $("#findByPin_pincode").show();
+                        
+                        $("#findByPin_date").show();
+                        
+                    }
+                    if ($("#node-input-method").val() === 'findByDistrict') {
+
+                        $("#findByDistrict_acceptLanguage").show();
+                        
+                        $("#findByDistrict_districtId").show();
+                        
+                        $("#findByDistrict_date").show();
+                        
+                    }
+                    if ($("#node-input-method").val() === 'findByLatLong') {
+
+                        $("#findByLatLong_acceptLanguage").show();
+                        
+                        $("#findByLatLong_lat").show();
+                        
+                        $("#findByLatLong_long").show();
+                        
+                    }
+                    if ($("#node-input-method").val() === 'calendarByPin') {
+
+                        $("#calendarByPin_acceptLanguage").show();
+                        
+                        $("#calendarByPin_pincode").show();
+                        
+                        $("#calendarByPin_date").show();
+                        
+                    }
+                    if ($("#node-input-method").val() === 'calendarByDistrict') {
+
+                        $("#calendarByDistrict_acceptLanguage").show();
+                        
+                        $("#calendarByDistrict_districtId").show();
+                        
+                        $("#calendarByDistrict_date").show();
+                        
+                    }
+                    if ($("#node-input-method").val() === 'calendarByCenter') {
+
+                        $("#calendarByCenter_acceptLanguage").show();
+                        
+                        $("#calendarByCenter_centerId").show();
+                        
+                        $("#calendarByCenter_date").show();
+                        
+                    }
+                    if ($("#node-input-method").val() === 'download') {
+
+                        $("#download_beneficiaryReferenceId").show();
+                        
+                    }
+                } else {
+                    if ($("#node-input-method").val() === 'generateOTP') {
+
+                    }
+                    if ($("#node-input-method").val() === 'confirmOTP') {
+
+                    }
+                    if ($("#node-input-method").val() === 'states') {
+
+                    }
+                    if ($("#node-input-method").val() === 'districts') {
+
+                        $("#districts_stateId").show();
+                        
+                    }
+                    if ($("#node-input-method").val() === 'findByPin') {
+
+                        $("#findByPin_pincode").show();
+                        
+                        $("#findByPin_date").show();
+                        
+                    }
+                    if ($("#node-input-method").val() === 'findByDistrict') {
+
+                        $("#findByDistrict_districtId").show();
+                        
+                        $("#findByDistrict_date").show();
+                        
+                    }
+                    if ($("#node-input-method").val() === 'findByLatLong') {
+
+                        $("#findByLatLong_lat").show();
+                        
+                        $("#findByLatLong_long").show();
+                        
+                    }
+                    if ($("#node-input-method").val() === 'calendarByPin') {
+
+                        $("#calendarByPin_pincode").show();
+                        
+                        $("#calendarByPin_date").show();
+                        
+                    }
+                    if ($("#node-input-method").val() === 'calendarByDistrict') {
+
+                        $("#calendarByDistrict_districtId").show();
+                        
+                        $("#calendarByDistrict_date").show();
+                        
+                    }
+                    if ($("#node-input-method").val() === 'calendarByCenter') {
+
+                        $("#calendarByCenter_centerId").show();
+                        
+                        $("#calendarByCenter_date").show();
+                        
+                    }
+                    if ($("#node-input-method").val() === 'download') {
+
+                        $("#download_beneficiaryReferenceId").show();
+                        
+                    }
+                }
+            };
+
+            $("#node-input-method").change(function () {
+                showParameters();
+            });
+
+            $("#optional-parameters").change(function () {
+                showParameters();
+            });
+
+        }
+    });
+</script>
+
+<script type="text/html" data-template-name="co-win-public-apis">
+    <div class="form-row">
+        <label for="node-input-service"><i class="fa fa-cloud"></i> <span data-i18n="CoWinPublicApis.label.service"></span></label>
+        <input type="text" id="node-input-service">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-method"><i class="fa fa-tasks"></i> <span data-i18n="CoWinPublicApis.label.method"></span></label>
+        <select id="node-input-method">
+            <option value="generateOTP" data-i18n="CoWinPublicApis.parameters.generateOTP"></option>
+            <option value="confirmOTP" data-i18n="CoWinPublicApis.parameters.confirmOTP"></option>
+            <option value="states" data-i18n="CoWinPublicApis.parameters.states"></option>
+            <option value="districts" data-i18n="CoWinPublicApis.parameters.districts"></option>
+            <option value="findByPin" data-i18n="CoWinPublicApis.parameters.findByPin"></option>
+            <option value="findByDistrict" data-i18n="CoWinPublicApis.parameters.findByDistrict"></option>
+            <option value="findByLatLong" data-i18n="CoWinPublicApis.parameters.findByLatLong"></option>
+            <option value="calendarByPin" data-i18n="CoWinPublicApis.parameters.calendarByPin"></option>
+            <option value="calendarByDistrict" data-i18n="CoWinPublicApis.parameters.calendarByDistrict"></option>
+            <option value="calendarByCenter" data-i18n="CoWinPublicApis.parameters.calendarByCenter"></option>
+            <option value="download" data-i18n="CoWinPublicApis.parameters.download"></option>
+        </select>
+        &nbsp;
+        <input type="checkbox" id="optional-parameters" style="margin-left: 10px; vertical-align: text-bottom; width: auto;">
+        <label for="optional-parameters" id="optional-parameters-label" style="width: auto;"> <span data-i18n="CoWinPublicApis.parameters.optionalParameters"></span></label>
+    </div>
+
+    <div class="form-row" id="generateOTP_body">
+        <label for="node-input-generateOTP_body"><i class="fa fa-list"></i> <span data-i18n="CoWinPublicApis.parameters.body"></span></label>
+
+        <input type="text" id="node-input-generateOTP_body" placeholder="" style="width:70%">
+        <input type="hidden" id="node-input-generateOTP_bodyType">
+    </div>
+
+    <div class="form-row" id="confirmOTP_body">
+        <label for="node-input-confirmOTP_body"><i class="fa fa-list"></i> <span data-i18n="CoWinPublicApis.parameters.body"></span></label>
+
+        <input type="text" id="node-input-confirmOTP_body" placeholder="" style="width:70%">
+        <input type="hidden" id="node-input-confirmOTP_bodyType">
+    </div>
+
+    <div class="form-row" id="states_acceptLanguage">
+        <label for="node-input-states_acceptLanguage"><i class="fa fa-list"></i> <span data-i18n="CoWinPublicApis.parameters.acceptLanguage"></span></label>
+
+        <input type="text" id="node-input-states_acceptLanguage" placeholder="The locate code of the preferred language such as en_US. The text data will be returned in the preferred language along with default English text." style="width:70%">
+        <input type="hidden" id="node-input-states_acceptLanguageType">
+    </div>
+
+    <div class="form-row" id="districts_acceptLanguage">
+        <label for="node-input-districts_acceptLanguage"><i class="fa fa-list"></i> <span data-i18n="CoWinPublicApis.parameters.acceptLanguage"></span></label>
+
+        <input type="text" id="node-input-districts_acceptLanguage" placeholder="The locate code of the preferred language such as en_US. The text data will be returned in the preferred language along with default English text." style="width:70%">
+        <input type="hidden" id="node-input-districts_acceptLanguageType">
+    </div>
+
+    <div class="form-row" id="districts_stateId">
+        <label for="node-input-districts_stateId"><i class="fa fa-list"></i> <span data-i18n="CoWinPublicApis.parameters.stateId"></span></label>
+
+        <input type="text" id="node-input-districts_stateId" placeholder="" style="width:70%">
+        <input type="hidden" id="node-input-districts_stateIdType">
+    </div>
+
+    <div class="form-row" id="findByPin_acceptLanguage">
+        <label for="node-input-findByPin_acceptLanguage"><i class="fa fa-list"></i> <span data-i18n="CoWinPublicApis.parameters.acceptLanguage"></span></label>
+
+        <input type="text" id="node-input-findByPin_acceptLanguage" placeholder="The locate code of the preferred language such as en_US. The text data will be returned in the preferred language along with default English text." style="width:70%">
+        <input type="hidden" id="node-input-findByPin_acceptLanguageType">
+    </div>
+
+    <div class="form-row" id="findByPin_pincode">
+        <label for="node-input-findByPin_pincode"><i class="fa fa-list"></i> <span data-i18n="CoWinPublicApis.parameters.pincode"></span></label>
+
+        <input type="text" id="node-input-findByPin_pincode" placeholder="" style="width:70%">
+        <input type="hidden" id="node-input-findByPin_pincodeType">
+    </div>
+
+    <div class="form-row" id="findByPin_date">
+        <label for="node-input-findByPin_date"><i class="fa fa-list"></i> <span data-i18n="CoWinPublicApis.parameters.date"></span></label>
+
+        <input type="text" id="node-input-findByPin_date" placeholder="" style="width:70%">
+        <input type="hidden" id="node-input-findByPin_dateType">
+    </div>
+
+    <div class="form-row" id="findByDistrict_acceptLanguage">
+        <label for="node-input-findByDistrict_acceptLanguage"><i class="fa fa-list"></i> <span data-i18n="CoWinPublicApis.parameters.acceptLanguage"></span></label>
+
+        <input type="text" id="node-input-findByDistrict_acceptLanguage" placeholder="The locate code of the preferred language such as en_US. The text data will be returned in the preferred language along with default English text." style="width:70%">
+        <input type="hidden" id="node-input-findByDistrict_acceptLanguageType">
+    </div>
+
+    <div class="form-row" id="findByDistrict_districtId">
+        <label for="node-input-findByDistrict_districtId"><i class="fa fa-list"></i> <span data-i18n="CoWinPublicApis.parameters.districtId"></span></label>
+
+        <input type="text" id="node-input-findByDistrict_districtId" placeholder="" style="width:70%">
+        <input type="hidden" id="node-input-findByDistrict_districtIdType">
+    </div>
+
+    <div class="form-row" id="findByDistrict_date">
+        <label for="node-input-findByDistrict_date"><i class="fa fa-list"></i> <span data-i18n="CoWinPublicApis.parameters.date"></span></label>
+
+        <input type="text" id="node-input-findByDistrict_date" placeholder="" style="width:70%">
+        <input type="hidden" id="node-input-findByDistrict_dateType">
+    </div>
+
+    <div class="form-row" id="findByLatLong_acceptLanguage">
+        <label for="node-input-findByLatLong_acceptLanguage"><i class="fa fa-list"></i> <span data-i18n="CoWinPublicApis.parameters.acceptLanguage"></span></label>
+
+        <input type="text" id="node-input-findByLatLong_acceptLanguage" placeholder="The locate code of the preferred language such as en_US. The text data will be returned in the preferred language along with default English text." style="width:70%">
+        <input type="hidden" id="node-input-findByLatLong_acceptLanguageType">
+    </div>
+
+    <div class="form-row" id="findByLatLong_lat">
+        <label for="node-input-findByLatLong_lat"><i class="fa fa-list"></i> <span data-i18n="CoWinPublicApis.parameters.lat"></span></label>
+
+        <input type="text" id="node-input-findByLatLong_lat" placeholder="" style="width:70%">
+        <input type="hidden" id="node-input-findByLatLong_latType">
+    </div>
+
+    <div class="form-row" id="findByLatLong_long">
+        <label for="node-input-findByLatLong_long"><i class="fa fa-list"></i> <span data-i18n="CoWinPublicApis.parameters.long"></span></label>
+
+        <input type="text" id="node-input-findByLatLong_long" placeholder="" style="width:70%">
+        <input type="hidden" id="node-input-findByLatLong_longType">
+    </div>
+
+    <div class="form-row" id="calendarByPin_acceptLanguage">
+        <label for="node-input-calendarByPin_acceptLanguage"><i class="fa fa-list"></i> <span data-i18n="CoWinPublicApis.parameters.acceptLanguage"></span></label>
+
+        <input type="text" id="node-input-calendarByPin_acceptLanguage" placeholder="The locate code of the preferred language such as en_US. The text data will be returned in the preferred language along with default English text." style="width:70%">
+        <input type="hidden" id="node-input-calendarByPin_acceptLanguageType">
+    </div>
+
+    <div class="form-row" id="calendarByPin_pincode">
+        <label for="node-input-calendarByPin_pincode"><i class="fa fa-list"></i> <span data-i18n="CoWinPublicApis.parameters.pincode"></span></label>
+
+        <input type="text" id="node-input-calendarByPin_pincode" placeholder="" style="width:70%">
+        <input type="hidden" id="node-input-calendarByPin_pincodeType">
+    </div>
+
+    <div class="form-row" id="calendarByPin_date">
+        <label for="node-input-calendarByPin_date"><i class="fa fa-list"></i> <span data-i18n="CoWinPublicApis.parameters.date"></span></label>
+
+        <input type="text" id="node-input-calendarByPin_date" placeholder="" style="width:70%">
+        <input type="hidden" id="node-input-calendarByPin_dateType">
+    </div>
+
+    <div class="form-row" id="calendarByDistrict_acceptLanguage">
+        <label for="node-input-calendarByDistrict_acceptLanguage"><i class="fa fa-list"></i> <span data-i18n="CoWinPublicApis.parameters.acceptLanguage"></span></label>
+
+        <input type="text" id="node-input-calendarByDistrict_acceptLanguage" placeholder="The locate code of the preferred language such as en_US. The text data will be returned in the preferred language along with default English text." style="width:70%">
+        <input type="hidden" id="node-input-calendarByDistrict_acceptLanguageType">
+    </div>
+
+    <div class="form-row" id="calendarByDistrict_districtId">
+        <label for="node-input-calendarByDistrict_districtId"><i class="fa fa-list"></i> <span data-i18n="CoWinPublicApis.parameters.districtId"></span></label>
+
+        <input type="text" id="node-input-calendarByDistrict_districtId" placeholder="" style="width:70%">
+        <input type="hidden" id="node-input-calendarByDistrict_districtIdType">
+    </div>
+
+    <div class="form-row" id="calendarByDistrict_date">
+        <label for="node-input-calendarByDistrict_date"><i class="fa fa-list"></i> <span data-i18n="CoWinPublicApis.parameters.date"></span></label>
+
+        <input type="text" id="node-input-calendarByDistrict_date" placeholder="" style="width:70%">
+        <input type="hidden" id="node-input-calendarByDistrict_dateType">
+    </div>
+
+    <div class="form-row" id="calendarByCenter_acceptLanguage">
+        <label for="node-input-calendarByCenter_acceptLanguage"><i class="fa fa-list"></i> <span data-i18n="CoWinPublicApis.parameters.acceptLanguage"></span></label>
+
+        <input type="text" id="node-input-calendarByCenter_acceptLanguage" placeholder="The locate code of the preferred language such as en_US. The text data will be returned in the preferred language along with default English text." style="width:70%">
+        <input type="hidden" id="node-input-calendarByCenter_acceptLanguageType">
+    </div>
+
+    <div class="form-row" id="calendarByCenter_centerId">
+        <label for="node-input-calendarByCenter_centerId"><i class="fa fa-list"></i> <span data-i18n="CoWinPublicApis.parameters.centerId"></span></label>
+
+        <input type="text" id="node-input-calendarByCenter_centerId" placeholder="" style="width:70%">
+        <input type="hidden" id="node-input-calendarByCenter_centerIdType">
+    </div>
+
+    <div class="form-row" id="calendarByCenter_date">
+        <label for="node-input-calendarByCenter_date"><i class="fa fa-list"></i> <span data-i18n="CoWinPublicApis.parameters.date"></span></label>
+
+        <input type="text" id="node-input-calendarByCenter_date" placeholder="" style="width:70%">
+        <input type="hidden" id="node-input-calendarByCenter_dateType">
+    </div>
+
+    <div class="form-row" id="download_beneficiaryReferenceId">
+        <label for="node-input-download_beneficiaryReferenceId"><i class="fa fa-list"></i> <span data-i18n="CoWinPublicApis.parameters.beneficiaryReferenceId"></span></label>
+
+        <input type="text" id="node-input-download_beneficiaryReferenceId" placeholder="" style="width:70%">
+        <input type="hidden" id="node-input-download_beneficiaryReferenceIdType">
+    </div>
+
+    <hr/>
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="node-red:common.label.name"></span></label>
+        <input type="text" id="node-input-name" data-i18n="[placeholder]node-red:common.label.name">
+    </div>
+</script>
+
+<script type="text/html" data-help-name="co-win-public-apis">
+
+    <p>Co-WIN Public APIs allow any third-party application to access certain un-restricted information, that can be shared with its users. This is limited only to read access in Co-WIN. The extent of access will be limited and in case of any misuse impacting the performance of Co-WIN solution will result in blocking any such application and entities as per the policies of MoHFW and taking any other appropriate action in accordance with law. The appointment availability data is cached and may be up to 5 minutes old. Further, these APIs are subject to a rate limit of 100 API calls per 5 minutes per IP. Please consider these points while using the APIs in your application. For further questions, please visit our <a href="https://github.com/cowinapi/developer.cowin/issues" target="_blank">Open Tracker on GitHub</a>. Please refer to <a href="https://apisetu.gov.in/document-central/cowin/Cowin%20API%20Guidelines.html" target="_blank">CoWIN API Guidelines</a> for more details.<br>[<i>Updated on 23rd September 2021</i>]</p>
+    <p><b>Methods</b></p>
+        <h3>POST /v2/auth/public/generateOTP</h3>
+        <p>Initiate beneficiary authentication using mobile and OTP</p>
+        <dl class="message-properties">
+        <dt>body <span class="property-type"></span></dt>
+        </dl>
+        <h3>POST /v2/auth/public/confirmOTP</h3>
+        <p>API to confirm the OTP for authentication.</p>
+        <dl class="message-properties">
+        <dt>body <span class="property-type"></span></dt>
+        </dl>
+        <h3>GET /v2/admin/location/states</h3>
+        <p>API to get all the states in India.</p>
+        <dl class="message-properties">
+        <dt>Accept-Language <span class="property-type">string</span></dt>
+        </dl>
+        <h3>GET /v2/admin/location/districts/{state_id}</h3>
+        <p>API to get all the districts.</p>
+        <dl class="message-properties">
+        <dt>Accept-Language <span class="property-type">string</span></dt>
+        <dt>state_id <span class="property-type">string</span></dt>
+        </dl>
+        <h3>GET /v2/appointment/sessions/public/findByPin</h3>
+        <p>API to get planned vaccination sessions on a specific date in a given pin.</p>
+        <dl class="message-properties">
+        <dt>Accept-Language <span class="property-type">string</span></dt>
+        <dt>pincode <span class="property-type">string</span></dt>
+        <dt>date <span class="property-type">string</span></dt>
+        </dl>
+        <h3>GET /v2/appointment/sessions/public/findByDistrict</h3>
+        <p>API to get planned vaccination sessions on a specific date in a given district.</p>
+        <dl class="message-properties">
+        <dt>Accept-Language <span class="property-type">string</span></dt>
+        <dt>district_id <span class="property-type">string</span></dt>
+        <dt>date <span class="property-type">string</span></dt>
+        </dl>
+        <h3>GET /v2/appointment/centers/public/findByLatLong</h3>
+        <p>API to get vaccination centers by latitude and longitude. **Please note that this is a draft specification.**</p>
+        <dl class="message-properties">
+        <dt>Accept-Language <span class="property-type">string</span></dt>
+        <dt>lat <span class="property-type">number</span></dt>
+        <dt>long <span class="property-type">number</span></dt>
+        </dl>
+        <h3>GET /v2/appointment/sessions/public/calendarByPin</h3>
+        <p>API to get planned vaccination sessions for 7 days from a specific date in a given pin.</p>
+        <dl class="message-properties">
+        <dt>Accept-Language <span class="property-type">string</span></dt>
+        <dt>pincode <span class="property-type">string</span></dt>
+        <dt>date <span class="property-type">string</span></dt>
+        </dl>
+        <h3>GET /v2/appointment/sessions/public/calendarByDistrict</h3>
+        <p>API to get planned vaccination sessions for 7 days from a specific date in a given district.</p>
+        <dl class="message-properties">
+        <dt>Accept-Language <span class="property-type">string</span></dt>
+        <dt>district_id <span class="property-type">string</span></dt>
+        <dt>date <span class="property-type">string</span></dt>
+        </dl>
+        <h3>GET /v2/appointment/sessions/public/calendarByCenter</h3>
+        <p>API to get planned vaccination sessions for 7 days from a specific date for a given center. **Please note that this is a draft specification.**</p>
+        <dl class="message-properties">
+        <dt>Accept-Language <span class="property-type">string</span></dt>
+        <dt>center_id <span class="property-type">string</span></dt>
+        <dt>date <span class="property-type">string</span></dt>
+        </dl>
+        <h3>GET /v2/registration/certificate/public/download</h3>
+        <p>API to download vaccination certificate in PDF format by beneficiary reference id. This API requires a <i>Bearer</i> token acquired with user mobile OTP validation as defined in User Authentication APIs.</p>
+        <dl class="message-properties">
+        <dt>beneficiary_reference_id <span class="property-type">string</span></dt>
+        </dl>
+</script>
+<script type="text/javascript">
+    RED.nodes.registerType('co-win-public-apis-service', {
+        category: 'config',
+        defaults: {
+
+            secureApiKeyHeaderOrQueryName: { value: "" },
+            secureApiKeyIsQuery: { value: false },
+
+            name: { value: "" },
+        },
+        credentials: {
+            secureApiKeyValue: { type: "password" },
+            temp: { type: "text" }
+        },
+        label: function () {
+            return this.name || this.host;
+        },
+        labelStyle: function() {
+            return this.name?"node_label_italic":"";
+        },
+        oneditprepare: function () {
+            $('#node-config-input-secureApiKeyIsQuery-label').hide();
+            $('#node-config-input-secureApiKeyIsQuery').hide();
+            var selected = $('#node-config-input-secureApiKeyIsQuery option:selected');
+            if (!selected.val()) {
+                $('#node-config-input-secureApiKeyIsQuery').val(false);
+            }
+        }
+    });
+</script>
+
+<script type="text/html" data-template-name="co-win-public-apis-service">
+
+    <div class="form-row">
+        <label id="node-config-input-secureApiKeyHeaderOrQueryName-label" for="node-config-input-secureApiKeyHeaderOrQueryName"><i class="fa fa-list"></i> <span data-i18n="CoWinPublicApis.label.header"></span></label>
+        <input type="text" id="node-config-input-secureApiKeyHeaderOrQueryName" placeholder="">
+    </div>
+    <div class="form-row">
+        <label id="node-config-input-secureApiKeyValue-label" for="node-config-input-secureApiKeyValue"><i class="fa fa-lock"></i> <span data-i18n="CoWinPublicApis.label.value"></span></label>
+        <input type="password" id="node-config-input-secureApiKeyValue" placeholder="">
+    </div>
+    <div class="form-row">
+        <label id="node-config-input-secureApiKeyIsQuery-label" for="node-config-input-secureApiKeyIsQuery"><i class="fa fa-dot-circle-o"></i> <span data-i18n="CoWinPublicApis.label.isQuery"></span></label>
+        <select id="node-config-input-secureApiKeyIsQuery">
+            <option value="true">true</option>
+            <option value="false">false</option>
+        </select>
+    </div>
+
+    <div class="form-row">
+        <label for="node-config-input-name"><i class="fa fa-tag"></i> <span data-i18n="node-red:common.label.name"></span></label>
+        <input type="text" id="node-config-input-name" data-i18n="[placeholder]node-red:common.label.name">
+    </div>
+</script>
+
+<script type="text/html" data-help-name="co-win-public-apis-service">
+
+    <p><b>Header</b>: Variable name to set API key</p>
+    <p><b>Value</b>: Value of API key</p>
+</script>
